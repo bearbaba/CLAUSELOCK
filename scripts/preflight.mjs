@@ -51,4 +51,18 @@ if(value.proposals>=1){
  if(proposal.id!==1||proposal.policy_id!==1)throw Error('Proposal #1 ID / policy mismatch');
  console.log('LATEST_FINAL_PROPOSAL_1:',JSON.stringify({id:proposal.id,policy_id:proposal.policy_id,proposer:proposal.proposer,base_version:proposal.base_version,status:proposal.status,decision:proposal.decision}));
 }
+if(value.proposals>=2){
+ const raw=await client.readContract({address,functionName:'get_proposal',args:[2],
+  transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
+ const proposal=typeof raw==='string'?JSON.parse(raw):raw;
+ if(proposal.id!==2||proposal.policy_id!==1)throw Error('Proposal #2 ID / policy mismatch');
+ console.log('LATEST_FINAL_PROPOSAL_2:',JSON.stringify({id:proposal.id,policy_id:proposal.policy_id,
+  base_version:proposal.base_version,status:proposal.status,decision:proposal.decision}));
+ const activeRaw=await client.readContract({address,functionName:'get_policy',args:[1],
+  transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
+ const policy=typeof activeRaw==='string'?JSON.parse(activeRaw):activeRaw;
+ if(proposal.decision==='WEAKENED'&&proposal.status==='ASSESSED'&&policy.version!==2)
+  throw Error('WEAKENED proposal exists but policy version unexpectedly changed');
+ if(proposal.decision==='WEAKENED')console.log('WEAKENED_POLICY_RETAINED_VERSION:',policy.version);
+}
 console.log('CLAUSELOCK_DEPLOYMENT_PREFLIGHT_PASS');

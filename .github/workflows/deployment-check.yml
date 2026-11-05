@@ -1,0 +1,19 @@
+name: Read-only Studionet deployment preflight
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/preflight.mjs"
+      - "package.json"
+      - ".github/workflows/deployment-check.yml"
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund
+      - run: npm run preflight

@@ -14,6 +14,17 @@ This ledger records signed transaction results and independently checked persist
 | Evaluate protected meaning | `evaluate_amendment(1)` | Proposer `0x60Bf…eBff` | FINALIZED · SUCCESS · Accepted | `PRESERVED` | [Transaction](https://explorer-studio.genlayer.com/tx/0x683c6022a04323b0ef313ee8a2f5fb69af3c4a59c57b2e101a1604412e20e350) |
 | Activate approved version | `activate_amendment(1)` | Owner `0x4C7c…8Dcb` | FINALIZED · SUCCESS · Accepted | Policy version `2` | [Transaction](https://explorer-studio.genlayer.com/tx/0x775ac328b602464455bc5a0f6d80cd7868e1f08fab3b533627394fb4e1f8e09f) |
 
+## Semantic safeguard assessment — Proposal #2
+
+After version 2 was activated, the Owner submitted a new amendment that would allow **one reviewer for invoices below 1,000 units** and require only that reviewer's record. This conflicts with both frozen protected guarantees.
+
+| Step | Method | Signer | GenVM result | Returned value | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| Create weaker amendment | `propose_amendment(1, …)` | Owner `0x4C7c…8Dcb` | FINALIZED · SUCCESS · Accepted | Proposal ID `2` | [Transaction](https://explorer-studio.genlayer.com/tx/0x506703b6bff9e402f1f07a5193b65c2f8526bb465e7fdb9d8159e72b04ce6dc5) |
+| Assess safeguard weakening | `evaluate_amendment(2)` | Owner `0x4C7c…8Dcb` | FINALIZED · SUCCESS · Accepted | `WEAKENED` | [Transaction](https://explorer-studio.genlayer.com/tx/0x2ab0001945765fce2518238dd3d8dafc6131e60b11179c7c16271147644b3f85) |
+
+The equivalence principle output for the second assessment was also **`WEAKENED`**. This demonstrates semantic classification of an explicit exception to the two-reviewer requirement. Contract-level enforcement is determined by `activate_amendment`, which requires an assessed `PRESERVED` verdict.
+
 ### Scope and authorization
 
 - Policy Owner: `0x4C7cb73aC8F8999af21cfc9fF4cF2333a9508Dcb`.

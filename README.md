@@ -35,9 +35,9 @@ Read calls: `get_policy`, `get_proposal`, `get_version`, `activation_eligibility
 
 ## Live Studionet demonstration
 
-**Policy #1 has been upgraded from version 1 to version 2** on [GenLayer Studionet 61999](https://explorer-studio.genlayer.com/address/0x683A1718D50ae65b9eAfa31F06DfB06FC7C9DEED). The signed workflow includes owner-created protected guarantees, a proposer-signed revision, independent AI consensus returning `PRESERVED`, and owner activation. The live `LATEST_FINAL` readback confirms `version=2` and `Proposal #1: ACTIVATED / PRESERVED`.
+**Policy #1 has been upgraded from version 1 to version 2** on [GenLayer Studionet 61999](https://explorer-studio.genlayer.com/address/0x683A1718D50ae65b9eAfa31F06DfB06FC7C9DEED). The signed workflow includes owner-created protected guarantees, a proposer-signed revision, independent AI consensus returning `PRESERVED`, and owner activation. The live `LATEST_FINAL` readback confirms `version=2` and `Proposal #1: ACTIVATED / PRESERVED`. A second amendment attempted to weaken two-reviewer and audit safeguards; GenLayer consensus returned `WEAKENED`, and `activate_amendment(2)` was rejected by on-chain rollback with three validator agreements. The policy remained at version 2.
 
-[**View the four signed transactions and verified state**](docs/ONCHAIN_EVIDENCE.md).
+[**View signed approvals, rejected changes and verified state**](docs/ONCHAIN_EVIDENCE.md).
 
 ## Quickstart
 

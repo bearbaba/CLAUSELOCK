@@ -33,6 +33,12 @@ Protected guarantee `DUAL_APPROVAL`: Every vendor payment requires approval from
 
 Read calls: `get_policy`, `get_proposal`, `get_version`, `activation_eligibility`, `stats`. Guardrails are immutable. Older assessed proposals cannot silently apply after a new version becomes active; historical versions persist.
 
+## Live Studionet demonstration
+
+**Policy #1 has been upgraded from version 1 to version 2** on [GenLayer Studionet 61999](https://explorer-studio.genlayer.com/address/0x683A1718D50ae65b9eAfa31F06DfB06FC7C9DEED). The signed workflow includes owner-created protected guarantees, a proposer-signed revision, independent AI consensus returning `PRESERVED`, and owner activation. The live `LATEST_FINAL` readback confirms `version=2` and `Proposal #1: ACTIVATED / PRESERVED`.
+
+[**View the four signed transactions and verified state**](docs/ONCHAIN_EVIDENCE.md).
+
 ## Quickstart
 
 Source: [`contracts/clauselock.py`](contracts/clauselock.py). Import it into [GenLayer Studio](https://studio.genlayer.com/) and follow [`docs/STUDIO_ACCEPTANCE.md`](docs/STUDIO_ACCEPTANCE.md). Use separate owner and proposer wallets to demonstrate the authorization boundary.

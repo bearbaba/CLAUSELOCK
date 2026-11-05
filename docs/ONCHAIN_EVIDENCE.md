@@ -1,0 +1,40 @@
+# CLAUSELOCK — Signed Studionet evidence
+
+**Network:** GenLayer Studionet 61999  
+**Deployed contract:** [0x683A1718D50ae65b9eAfa31F06DfB06FC7C9DEED](https://explorer-studio.genlayer.com/address/0x683A1718D50ae65b9eAfa31F06DfB06FC7C9DEED)
+
+This ledger records signed transaction results and independently checked persisted `LATEST_FINAL` state from the completed **Policy #1 / Proposal #1** workflow.
+
+## Signed lifecycle
+
+| Step | Method | Signer | GenVM result | Returned value | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| Create policy | `create_policy` | Owner `0x4C7c…8Dcb` | FINALIZED · SUCCESS · Accepted | Policy ID `1` | [Transaction](https://explorer-studio.genlayer.com/tx/0x8b6646626304775e7397b4a538976e0f2fb1bec063137da42290e91bbeffc78d) |
+| Propose wording-preserving amendment | `propose_amendment(1, …)` | Proposer `0x60Bf…eBff` | FINALIZED · SUCCESS · Accepted | Proposal ID `1` | [Transaction](https://explorer-studio.genlayer.com/tx/0x54c630444bb0877e0fc60b7b48ae337ee4916dbb91ee29e5b3ebe3042aa3573c) |
+| Evaluate protected meaning | `evaluate_amendment(1)` | Proposer `0x60Bf…eBff` | FINALIZED · SUCCESS · Accepted | `PRESERVED` | [Transaction](https://explorer-studio.genlayer.com/tx/0x683c6022a04323b0ef313ee8a2f5fb69af3c4a59c57b2e101a1604412e20e350) |
+| Activate approved version | `activate_amendment(1)` | Owner `0x4C7c…8Dcb` | FINALIZED · SUCCESS · Accepted | Policy version `2` | [Transaction](https://explorer-studio.genlayer.com/tx/0x775ac328b602464455bc5a0f6d80cd7868e1f08fab3b533627394fb4e1f8e09f) |
+
+### Scope and authorization
+
+- Policy Owner: `0x4C7cb73aC8F8999af21cfc9fF4cF2333a9508Dcb`.
+- Proposal author: `0x60Bfdf6315294c7856Acdc0B80D7Bd40217DEBff`.
+- Protected guarantees: `DUAL_APPROVAL` (two distinct approvals without amount-based exceptions) and `AUDIT_TRAIL` (retain both approvals).
+- The revised policy retains independent approval requirements across payment amounts, plus permanent audit records.
+- The `evaluate_amendment` transaction returned `PRESERVED` with equivalence output `PRESERVED` and Consensus `Accepted`.
+
+### Independent latest-final readback
+
+[Read-only deployment and state verification](https://github.com/bearbaba/CLAUSELOCK/actions/runs/42035764726), successful re-run after activation on Nov 5, 2026:
+
+```json
+{"policies":1,"proposals":1}
+{"policy_id":1,"owner":"0x4c7cb73ac8f8999af21cfc9ff4cf2333a9508dcb","version":2,"guardrails":["DUAL_APPROVAL","AUDIT_TRAIL"]}
+{"proposal_id":1,"base_version":1,"status":"ACTIVATED","decision":"PRESERVED"}
+```
+
+The automated read-only preflight also verified a normalized deployed-source match, required ABI schema, and a successful `LATEST_FINAL` read. The initial policy and active version are retained in the versioned contract state.
+
+## Reviewer walkthrough
+
+Import the [deployed contract](https://studio.genlayer.com/?import-contract=0x683A1718D50ae65b9eAfa31F06DfB06FC7C9DEED), read `get_policy(1)` and `get_proposal(1)`, then inspect `get_version(1,1)` and `get_version(1,2)` to compare the original and activated texts. The contract's runtime uses independent GenLayer validator evaluation; historical records and current activation eligibility remain readable.
+

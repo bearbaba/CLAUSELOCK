@@ -1,0 +1,12 @@
+{
+  "name": "clauselock",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preflight": "node scripts/preflight.mjs"
+  },
+  "dependencies": {
+    "genlayer-stable": "npm:genlayer-js@1.1.8"
+  }
+}

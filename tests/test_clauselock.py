@@ -16,12 +16,21 @@ class Return:
 class Runtime:
     def __init__(self):
         self.answer = "PRESERVED"
+        self.sequence = None
+        self.calls = 0
         self.message = types.SimpleNamespace(sender_address=types.SimpleNamespace(as_hex=OWNER))
         self.vm = types.SimpleNamespace(UserError=ValueError, Return=Return,
                                         run_nondet_unsafe=self.validate)
-        self.nondet = types.SimpleNamespace(exec_prompt=lambda prompt: self.answer)
+        self.nondet = types.SimpleNamespace(exec_prompt=self.exec_prompt)
         self.public = types.SimpleNamespace(write=lambda f: f, view=lambda f: f)
         self.Contract = MockContract
+
+    def exec_prompt(self, prompt):
+        if self.sequence:
+            answer = self.sequence[self.calls % len(self.sequence)]
+            self.calls += 1
+            return answer
+        return self.answer
 
     def validate(self, leader, validator):
         proposal = leader()
@@ -66,6 +75,8 @@ class ClauseLockTests(unittest.TestCase):
     def setUp(self):
         runtime.message.sender_address.as_hex = OWNER
         runtime.answer = "PRESERVED"
+        runtime.sequence = None
+        runtime.calls = 0
         self.c = module.ClauseLock()
         self.pid = self.c.create_policy("Payment review policy", BASE, GUARDS)
 
@@ -122,6 +133,17 @@ class ClauseLockTests(unittest.TestCase):
         self.change_actor(OWNER)
         with self.assertRaises(ValueError):
             self.c.activate_amendment(proposal)
+
+    def test_validator_disagreement_preserves_state(self):
+        proposal = self.propose()
+        runtime.sequence = ["PRESERVED", "WEAKENED"]
+        runtime.calls = 0
+        with self.assertRaisesRegex(ValueError, "consensus disagreement"):
+            self.c.evaluate_amendment(proposal)
+        state = json.loads(self.c.get_proposal(proposal))
+        self.assertEqual(state["decision"], "PENDING")
+        self.assertEqual(state["status"], "PROPOSED")
+        self.assertEqual(json.loads(self.c.get_policy(self.pid))["version"], 1)
 
     def test_archive_and_guardrail_validation(self):
         with self.assertRaisesRegex(ValueError, "duplicate"):

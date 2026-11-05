@@ -20,7 +20,7 @@ Protected clauses JSON:
 
 Call `create_policy(title, baseline, guardrails)` as Owner. Read `get_policy(1)` and `get_version(1,1)`.
 
-Submit this candidate as a separate proposer (rationale minimum 24 chars):
+From a separate proposer wallet, record this candidate amendment (rationale minimum 24 chars):
 
 > Every vendor payment, regardless of its value, requires approval from two different finance reviewers before release. A permanent approval record must capture both separate decisions, and there are no threshold exceptions.
 
@@ -42,6 +42,6 @@ Propose two candidates against the same version. After one is `PRESERVED` and ac
 
 Each successful call: transaction hash + `FINALIZED` + GenVM `SUCCESS` + stored-state readback. AI decisions additionally require the actual consensus result. A finalized rollback is a negative-test result, not successful execution. Compare source and deployment class/schema in Studio.
 
-## Submission scope
+## Verification scope
 
-Intelligent Contracts category: standalone reusable policy protection, not a full frontend project. Suggested evidence: repository source, local test output, signed Studio results and a concise reviewer log.
+This is a standalone policy-integrity primitive without a frontend dependency. Reproduce the signed scenario using the contract source, local tests, actual Studio transactions, validator consensus output and final-state readbacks.

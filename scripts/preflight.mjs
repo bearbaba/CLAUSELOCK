@@ -36,4 +36,19 @@ const value=typeof result==='string'?JSON.parse(result):result;
 if(!Number.isSafeInteger(value?.policies)||!Number.isSafeInteger(value?.proposals))
  throw Error('Unexpected stats readback');
 console.log('LATEST_FINAL_STATS:',JSON.stringify(value));
+if(value.policies>=1){
+ const policyRaw=await client.readContract({address,functionName:'get_policy',args:[1],
+  transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
+ const policy=typeof policyRaw==='string'?JSON.parse(policyRaw):policyRaw;
+ if(policy.id!==1||policy.owner?.toLowerCase()!=='0x4c7cb73ac8f8999af21cfc9ff4cf2333a9508dcb')
+  throw Error('Policy #1 owner / readback mismatch');
+ console.log('LATEST_FINAL_POLICY_1:',JSON.stringify({id:policy.id,owner:policy.owner,version:policy.version,guardrails:policy.protected_clauses?.map(x=>x.id)}));
+}
+if(value.proposals>=1){
+ const proposalRaw=await client.readContract({address,functionName:'get_proposal',args:[1],
+  transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
+ const proposal=typeof proposalRaw==='string'?JSON.parse(proposalRaw):proposalRaw;
+ if(proposal.id!==1||proposal.policy_id!==1)throw Error('Proposal #1 ID / policy mismatch');
+ console.log('LATEST_FINAL_PROPOSAL_1:',JSON.stringify({id:proposal.id,policy_id:proposal.policy_id,proposer:proposal.proposer,base_version:proposal.base_version,status:proposal.status,decision:proposal.decision}));
+}
 console.log('CLAUSELOCK_DEPLOYMENT_PREFLIGHT_PASS');

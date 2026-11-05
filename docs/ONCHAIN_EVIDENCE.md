@@ -3,7 +3,7 @@
 **Network:** GenLayer Studionet 61999  
 **Deployed contract:** [0x683A1718D50ae65b9eAfa31F06DfB06FC7C9DEED](https://explorer-studio.genlayer.com/address/0x683A1718D50ae65b9eAfa31F06DfB06FC7C9DEED)
 
-This ledger records signed transaction results and independently checked persisted `LATEST_FINAL` state from the completed **Policy #1 / Proposal #1** workflow.
+This ledger records signed transaction results and independently checked persisted `LATEST_FINAL` state from the **Policy #1, Proposal #1 and Proposal #2** workflow.
 
 ## Signed lifecycle
 
@@ -22,6 +22,19 @@ After version 2 was activated, the Owner submitted a new amendment that would al
 | --- | --- | --- | --- | --- | --- |
 | Create weaker amendment | `propose_amendment(1, …)` | Owner `0x4C7c…8Dcb` | FINALIZED · SUCCESS · Accepted | Proposal ID `2` | [Transaction](https://explorer-studio.genlayer.com/tx/0x506703b6bff9e402f1f07a5193b65c2f8526bb465e7fdb9d8159e72b04ce6dc5) |
 | Assess safeguard weakening | `evaluate_amendment(2)` | Owner `0x4C7c…8Dcb` | FINALIZED · SUCCESS · Accepted | `WEAKENED` | [Transaction](https://explorer-studio.genlayer.com/tx/0x2ab0001945765fce2518238dd3d8dafc6131e60b11179c7c16271147644b3f85) |
+
+### Enforcement — rejected activation of weakened policy
+
+The Owner signed `activate_amendment(2)` after GenLayer evaluated the second proposal as `WEAKENED`.
+
+- [On-chain transaction](https://explorer-studio.genlayer.com/tx/0x15d0a6dd7cf993dc98ebb81cd3fd3d7c033b445b88ab8b2def6a2e5a905951ba)
+- Transaction status: **FINALIZED**; consensus result: **Accepted**.
+- GenVM execution: **ERROR / Rollback**, intentionally rejecting the disallowed state transition.
+- Exact rollback message: `proposal not authorized for activation`.
+- Validator responses: three `Agree` results on the same rollback; two other validators cancelled after quorum.
+- This is an **expected security-enforcement outcome**, not a successful activation.
+
+The effective policy version is independently checked by the read-only `LATEST_FINAL` verification workflow.
 
 The equivalence principle output for the second assessment was also **`WEAKENED`**. This demonstrates semantic classification of an explicit exception to the two-reviewer requirement. Contract-level enforcement is determined by `activate_amendment`, which requires an assessed `PRESERVED` verdict.
 
